@@ -1,33 +1,33 @@
-const { Datatypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 const User = sequelize.define('User', {
     user_id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
     },
     surname: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            notEmpty: true
-        }
+            notEmpty: true,
+        },
     },
     first_name: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            notEmpty: true
-        }
+            notEmpty: true,
+        },
     },
     middle_name: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
     },
     gender: {
         type: DataTypes.ENUM('Male', 'Female'),
-        allowNull: false
+        allowNull: false,
     },
     email: {
         type: DataTypes.STRING,
@@ -35,29 +35,41 @@ const User = sequelize.define('User', {
         unique: true,
         validate: {
             isEmail: true,
-            notEmpty: true
-        }
+            notEmpty: true,
+        },
     },
-    password_hash: {
+    password: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
             notEmpty: true,
-            len: [8, 100] //Password should have a minimum of 8 characters
-        }
+            len: [8, 100], // Password should be at least 8 characters long
+        },
+    },
+    verification_code: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    is_verified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     },
     role: {
         type: DataTypes.ENUM('Applicant', 'Admin'),
-        defaultValue: 'Applicant'
-    }
+        defaultValue: 'Applicant',
+    },
+    course_applied_for: {
+        type: DataTypes.ENUM('PGD', 'Masters', 'PhD'),
+        allowNull: false,
+    },
 }, {
     tableName: 'users',
     timestamps: true,
     hooks: {
         beforeCreate: async (user) => {
-            // Password hashing logic can be added here
-        }
-    }
+            // You can add password hashing logic here if necessary
+        },
+    },
 });
 
-mobile.exports = User;
+module.exports = User;
